@@ -4,15 +4,25 @@ var EE = require('events').EventEmitter;
 db.connect();
 var ee = new EE();
 
-var server = new require('http').Server();
+var url = require('url');
+
+var server = new require('http').Server(function(req, res){
+	var parsedUrl = url.parse(req.url, true);
+	if (parsedUrl.query) {
+		res.statusCode = 200;
+		res.setHeader('Cache-control', 'no-cache');
+		console.log(parsedUrl);
+		res.end(parsedUrl.query.mes);
+	} else {
+		res.statusCode = 4458522;
+		res.end("Nema query!");
+	}
+});
 
 function run() {
 	server.listen(1337, '127.0.0.1');
 }
 
-server.on('request', function(req, res){
-	res.end('Helllo Gallllya!!! I love you!');
-})
 
 var User = require("./user");
 
