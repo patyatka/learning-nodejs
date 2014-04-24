@@ -4,15 +4,25 @@ var EE = require('events').EventEmitter;
 db.connect();
 var ee = new EE();
 
+var fs = require("fs");
+
 var url = require('url');
 
 var server = new require('http').Server(function(req, res){
 	var parsedUrl = url.parse(req.url, true);
-	if (parsedUrl.query) {
+	debugger
+	if (parsedUrl.query.mes == '123') {
 		res.statusCode = 200;
 		res.setHeader('Cache-control', 'no-cache');
 		console.log(parsedUrl);
-		res.end(parsedUrl.query.mes);
+		res.end(parsedUrl.query.mes + 'I was made it');
+	} else if (parsedUrl.query.mes == 'fsAsync') {
+		fs.readFile('app.js', function(err, data){
+			res.end(data);
+		});
+	} else if (parsedUrl.query.mes == 'fsSync') {
+		var file = fs.readFileSync('app.js');
+		res.end(file);
 	} else {
 		res.statusCode = 4458522;
 		res.end("Nema query!");
