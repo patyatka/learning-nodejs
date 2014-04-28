@@ -10,7 +10,6 @@ var url = require('url');
 
 var server = new require('http').Server(function(req, res){
 	var parsedUrl = url.parse(req.url, true);
-	debugger
 	if (parsedUrl.query.mes == '123') {
 		res.statusCode = 200;
 		res.setHeader('Cache-control', 'no-cache');
@@ -23,11 +22,23 @@ var server = new require('http').Server(function(req, res){
 	} else if (parsedUrl.query.mes == 'fsSync') {
 		var file = fs.readFileSync('app.js');
 		res.end(file);
+	} else if (parsedUrl.query.mes == 'runTimeout') {
+		var i = 0;
+		setTimeout(function(){
+			process.exit();
+		},5000);
+		setInterval(function(){
+			res.end(JSON.stringify(process.memoryUsage()) + i++);
+		}, 500);
+		process.nextTick(function(){
+			res.end('nextTick!');
+		});
 	} else {
 		res.statusCode = 4458522;
 		res.end("Nema query!");
 	}
 });
+
 
 function run() {
 	server.listen(1337, '127.0.0.1');
