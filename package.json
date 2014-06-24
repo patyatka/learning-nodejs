@@ -1,0 +1,9 @@
+{
+    "name": "learn nodejs",
+    "version": "0.0.1",
+    "description": "I learn nodejs here",
+    "author": "German",
+    "devDependencies": {
+        "express": "*"
+    }
+} 
